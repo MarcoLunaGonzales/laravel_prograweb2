@@ -37,11 +37,16 @@
                                     <i class="fadeIn animated bx bx-edit-alt"></i>
                                 </div>
                             </a>
-                            <a href="{{ route('productos.destroy', $producto->id) }}">
+                            <a href="#" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $producto->id }}').submit();">
                                 <div class="icon-base">
                                     <i class="fadeIn animated bx bx-trash-alt"></i>
                                 </div>
                             </a>
+
+                            <form id="delete-form-{{ $producto->id }}" action="{{ route('productos.destroy', $producto->id) }}" method="POST" style="display: none;">
+                                @csrf
+                                @method('DELETE')
+                            </form>
                         </td>
 
                     </tr>
