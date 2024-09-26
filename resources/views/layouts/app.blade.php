@@ -212,7 +212,7 @@
     <!--Data Tables js-->
     <script src="{{ asset('assets/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
 
-    <script>
+    <!--script>
         $(document).ready(function () {
             //Default data table
             $('#example').DataTable();
@@ -222,7 +222,110 @@
             });
             table.buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
         });
+    </script-->
+
+    <!--Aca Vienen las funciones para las ventas-->
+    <script>
+    $(document).ready(function(){
+        //Funcion para adicionar una fila de productos en la venta
+        $('#addRow').click(function(){
+            $('#detallesTable tbody').append(`
+            <tr>
+                <td>
+                    <select name="id_producto[]" class="producto">
+                        <option value="">Seleccionar Producto</option>
+                        @foreach($productos as $producto)
+                            <option value="{{ $producto->id }}" data-precio={{ $producto->precio }} >{{ $producto->nombre }}
+                            </option>
+                        @endforeach
+                    </select>
+                </td>
+                <td>
+                <input type="number" name="cantidad[]" class="cantidad" required>
+                </td>
+                <td>
+                    <input type="number" step="0.01" name="precio[]" class="precio" readonly required>
+                </td>
+                <td>
+                    <input type="number" step="0.01" name="monto[]" class="monto" readonly required>
+                </td>
+                <td>
+                    <button type="button" class="removeRow">Borrar Producto</button>
+                </td>
+            </tr>
+            `);
+        });
+        //Fin Funcion adicionar productos
+
+        //Funcion para eliminar fila
+        $(document).on('click','.removeRow', function(){
+            $(this).closest('tr').remove();
+
+        });
+        //Fin Funcion eliminar fila
+
+        //Esta funcion es para cambiar el precio del producto
+        $(document).on('change','.producto', function(){
+            const $fila = $(this).closest('tr');
+            const precio = $(this).find('option:selected').data('precio');
+            $fila.find('.precio').val(precio);
+            actualizarMonto($fila);
+        });
+        //Fin funcion cambiar precio
+
+        //Esta funcion es para cambiar el monto del producto
+        $(document).on('input', '.cantidad', function(){
+            const $fila = $(this).closest('tr');
+            actualizarMonto($fila);
+        });
+        //Fin funcion cambiar
+
+        //Funcion para actualizar el monto del producto
+        function actualizarMonto($fila){
+            const cantidad = parseFloat($fila.find('.cantidad').val()) || 0;
+            const precio = parseFloat($fila.find('.precio').val()) || 0;
+            const monto = cantidad * precio ;
+            $fila.find('.monto').val(monto.toFixed(2));
+        }
+        //Fin funcion para actulizar el monto del producto
+
+        //Enviar formulario con Ajax
+        /*$('#ventaForm').submit(function (e){
+            e.preventDefault();
+
+            let detalles = [];
+            $('#detallesTable tbody tr').each(function (){
+                detalles.push({
+                    id_producto: $(this).find('.producto').val();
+                    cantidad: $(this).find('.cantidad').val();
+                    precio: $(this).find('.precio').val();
+                });
+            });
+
+            $.ajax({
+                url: '{{ route("ventas.store") }}';
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    fecha: $('#fecha').val(),
+                    cliente: $('#cliente').val();
+                    detalles: detalles,
+                },
+                success: function (response) {
+                    alert('La Venta fue guardada satisfactoriamente');
+                    $('#ventaForm').[0].reset();
+                    $('#detallesTable tbody').empty();
+                },
+                error: function (error){
+                    console.error(error);
+                }
+            });
+        });*/
+        //Fin enviar formulario ajax
+
+    });
     </script>
+    <!--Fin funciones Ventas-->
 
 </body>
 

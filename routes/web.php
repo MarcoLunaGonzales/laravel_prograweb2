@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RouteController;
+
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\VentaController;
 
 
 /*
@@ -45,3 +47,7 @@ Route::get('/contenido1', function () {
 // Route::get('/productos', [ProductoController::class, 'listProductos'])->name('productos.lista');
 
 Route::resource('productos', ProductoController::class);
+
+Route::get('ventas/create', [VentaController::class,'create'])->name('ventas.create');
+
+Route::post('/ventas', [VentaController::class,'store'])->name('ventas.store');
