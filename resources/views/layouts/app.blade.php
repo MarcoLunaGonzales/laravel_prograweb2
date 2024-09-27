@@ -289,38 +289,41 @@
         }
         //Fin funcion para actulizar el monto del producto
 
-        //Enviar formulario con Ajax
-        /*$('#ventaForm').submit(function (e){
-            e.preventDefault();
 
+
+        //Enviar formulario con Ajax
+        $('#ventaForm').submit(function (e){
+            //console.log('funciona');
+            e.preventDefault();
             let detalles = [];
-            $('#detallesTable tbody tr').each(function (){
+            $('#detallesTable tbody tr').each(function () {
                 detalles.push({
-                    id_producto: $(this).find('.producto').val();
-                    cantidad: $(this).find('.cantidad').val();
-                    precio: $(this).find('.precio').val();
+                    id_producto: $(this).find('.producto').val(),
+                    cantidad: $(this).find('.cantidad').val(),
+                    precio: $(this).find('.precio').val(),
+                    monto: $(this).find('.monto').val(),
                 });
             });
 
             $.ajax({
-                url: '{{ route("ventas.store") }}';
+                url: '{{ route("ventas.store") }}',
                 method: 'POST',
                 data: {
                     _token: '{{ csrf_token() }}',
                     fecha: $('#fecha').val(),
-                    cliente: $('#cliente').val();
+                    cliente: $('#cliente').val(),
                     detalles: detalles,
                 },
                 success: function (response) {
                     alert('La Venta fue guardada satisfactoriamente');
-                    $('#ventaForm').[0].reset();
+                    $('#ventaForm')[0].reset();
                     $('#detallesTable tbody').empty();
                 },
                 error: function (error){
                     console.error(error);
                 }
             });
-        });*/
+        });
         //Fin enviar formulario ajax
 
     });

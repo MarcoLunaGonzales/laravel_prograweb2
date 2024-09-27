@@ -18,7 +18,23 @@ class VentaController extends Controller
         //return view('ventas.create');
     }
 
-    public function store(){
-        return ("todo ok");
+    public function store( Request $request ){
+        //Guardar Cabecera
+        $venta = Venta::create([
+            'fecha' => $request->fecha,
+            'cliente' => $request->cliente,
+        ]);
+
+        //Guardar los detalles
+        foreach ($request->detalles as $detalle) {
+            $venta->detalles()->create([
+                'id_producto' => $detalle['id_producto'],
+                'cantidad' => $detalle['cantidad'],
+                'precio' => $detalle['precio'],
+                'monto' => $detalle['monto'],
+            ]);
+        }
+        return response()->json(['success'=>true, 'venta_id'=> $venta->id]);
+
     }
 }
